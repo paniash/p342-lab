@@ -5,10 +5,10 @@
 void main()
 {
     float temp, total;
-    temp = 0;
-    total = 0;
-    for(int n=1; n<100000; n++)
+    for(int n=1; n<10000; n++)
     {
+        temp = 0;
+        total = 0;
         for(float i=1; i<=n; i++)
             temp+=1/i;
 
