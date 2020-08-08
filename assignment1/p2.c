@@ -15,7 +15,7 @@ void main()
     }
     else if(n==0)
     {
-        printf("FACTORIAL: 1");
+        prod=1;
     }
     else
     {

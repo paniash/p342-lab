@@ -1,13 +1,16 @@
+// To add 1+2+...+n for a given input n from the user
 #include <stdio.h>
 
 void main()
 {
-    int sum;
+    int sum, n;
     sum = 0;
-    for(int i=1;i<=100;i++)
+    printf("Enter a number\n");
+    scanf("%d", &n);
+    for(int i=1; i<=n; i++)
     {
         sum+=i;
     }
 
-    printf("%d", sum);
+    printf("SUM: %d", sum);
 }

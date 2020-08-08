@@ -7,5 +7,5 @@ for n in range(1, 10000):
     for j in range(1, n+2):
         total+=1/j
     if (total-temp) <= 0.001:
-        print("SUM: ", total)
+        print("SUM:", total)
         exit()
