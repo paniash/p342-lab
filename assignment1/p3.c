@@ -1,6 +1,5 @@
 // Sum over 1+1/2+1/3+... till the sume does not change by more than 0.001
 #include <stdio.h>
-#include <stdlib.h>
 
 /* This is bad coding practice since you're adding an extra layer of parameter n which really is not necessary, let the computer do the work!!!
 void main()
