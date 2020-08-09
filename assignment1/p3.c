@@ -35,7 +35,6 @@ void main()
     while (add > 0.001)
     {
         sum += add;
-        // printf("The sum:%f", sum);
         add = 1/(++num);
     }
     printf("%f\n", sum);
