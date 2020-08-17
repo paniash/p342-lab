@@ -55,3 +55,14 @@ int main()
     printf("A.B = %d", prod);
     return 0;
 }
+
+/*
+Output:
+The vectors are:
+A = [ 1,4,9,]
+B = [ 2,17,26,]
+
+Calculated results:
+A+B = [3,21,35,]
+A.B = 304
+*/

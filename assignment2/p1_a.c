@@ -16,3 +16,8 @@ int main()
     printf("Average distance: %lf", avg);
     return 0;
 }
+
+/*
+Output:
+Average distance: 1.944444
+*/

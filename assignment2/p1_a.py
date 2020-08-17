@@ -6,3 +6,6 @@ for i in range(6):
 
 avg = add/36
 print("Average distance:", avg)
+
+# Output:
+# Average distance: 1.94444

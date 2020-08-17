@@ -13,3 +13,7 @@ for j in range(3):
 
 print("Sum:",add)
 print("Dot product:", prod)
+
+# Output:
+# Sum: [3, 21, 35]
+# Dot product: 304
