@@ -29,6 +29,7 @@ for i in range(3):
 print("M x A =", vec)
 
 
+# Files being read: mpy.txt, npy.txt
 # Output
 # M = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 # N = [[13, 0, 3], [8, 29, 17], [4, 37, 45]]

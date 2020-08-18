@@ -84,6 +84,7 @@ int main()
 }
 
 /*
+Files being read: m_c.txt and n_c.txt
 Output:
 The matrices are
 M =
