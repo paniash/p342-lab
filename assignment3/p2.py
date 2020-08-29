@@ -15,19 +15,19 @@ b = [1, -2, 3]
 n = 3
 
 ## Partial pivoting
-def partial_pivot():
-    for l in range(n-1):
-        if abs(a[l][l]) == 0:
-            for l1 in range(l+1,n):
-                if abs(a[l1][l]) > abs(a[l][l]):
-                    a[l1], a[l] = a[l], a[l1]  # interchange a[l] and a[l1]
-                    b[l1], b[l] = b[l], b[l1]  # interchange b[l] and b[l1]
+def partial_pivot(a,b):
+    for i in range(n-1):
+        if abs(a[i][i]) == 0:
+            for j in range(i+1,n):
+                if abs(a[j][i]) > abs(a[i][i]):
+                    a[j], a[i] = a[i], a[j]  # interchange a[i] and a[j]
+                    b[j], b[i] = b[i], b[j]  # interchange b[i] and b[j]
 
 
 ## Gauss-Jordan algorithm
-def gauss_jordan():
+def gauss_jordan(a,b):
     for i in range(n):
-        partial_pivot()
+        partial_pivot(a,b)
         pivot = a[i][i]
         b[i] = b[i]/pivot
         for r in range(i, n):
@@ -40,5 +40,5 @@ def gauss_jordan():
                 for j in range(i, n):
                     a[k][j] = a[k][j] - factor*a[i][j]
 
-gauss_jordan()
+gauss_jordan(a,b)
 print(b)
