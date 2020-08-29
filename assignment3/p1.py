@@ -4,9 +4,9 @@
 # 2x + 5y + 2z = 7
 
 ## Define the problem as aX = b where X = [x1, x2, x3]
-# Read matrix 'a' from file a1.txt
+# Read matrix 'A' from file a1.txt
 with open('a1.txt', 'r') as f:
-    a = [[int(num) for num in line.split(' ')] for line in f]
+    A = [[int(num) for num in line.split(' ')] for line in f]
 
 # Vector b
 b = [2, -1, 7]
@@ -26,19 +26,19 @@ def partial_pivot(a,b):
 
 ## Gauss-Jordan algorithm
 def gauss_jordan(a,b):
+    partial_pivot(a,b)
     for i in range(n):
-        partial_pivot(a,b)
         pivot = a[i][i]
         b[i] = b[i]/pivot
-        for r in range(i, n):
-            a[i][r] = a[i][r]/pivot
+        for c in range(i, n):
+            a[i][c] = a[i][c]/pivot
 
         for k in range(n):
-            if k != i and a[k][i] != 0:  # not clear from following line
+            if k != i and a[k][i] != 0:
                 factor = a[k][i]
                 b[k] = b[k] - a[k][i]*b[i]
                 for j in range(i, n):
                     a[k][j] = a[k][j] - factor*a[i][j]
 
-gauss_jordan(a,b)
+gauss_jordan(A,b)
 print(b)
