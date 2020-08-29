@@ -4,10 +4,11 @@
 # 2x + 5y + 2z = 7
 
 ## Define the problem as aX = b where X = [x1, x2, x3]
-# Define a
-a = [[1, 3, 2], [2, 7, 7], [2, 5, 2]]
+# Read matrix 'a' from file a1.txt
+with open('a1.txt', 'r') as f:
+    a = [[int(num) for num in line.split(' ')] for line in f]
 
-# Define b
+# Vector b
 b = [2, -1, 7]
 
 # Number of linear equations
