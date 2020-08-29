@@ -1,13 +1,13 @@
 with open('a3.txt', 'r') as f:
-    a = [[int(num) for num in line.split(' ')] for line in f]
-
-# holds a copy of matrix 'a' since it gets modified in the subsequent lines
-with open('a3.txt', 'r') as f:
     A = [[int(num) for num in line.split(' ')] for line in f]
 
-b = [[1,0,0], [0,1,0], [0,0,1]]   # will later on hold the inverse of matrix 'a'
+# holds a copy of matrix 'A' since it gets modified in the subsequent lines
+with open('a3.txt', 'r') as f:
+    A0 = [[int(num) for num in line.split(' ')] for line in f]
 
-# Dimensions of the matrix
+b = [[1,0,0], [0,1,0], [0,0,1]]   # will later on hold the inverse of matrix 'A'
+
+# Dimension of the matrix
 n = 3
 
 ## Partial pivoting on matrix 'a' and vector 'b'
@@ -17,27 +17,29 @@ def partial_pivot(a,b):
             for j in range(i+1,n):
                 if abs(a[j][i]) > abs(a[i][i]):
                     a[j], a[i] = a[i], a[j]  # interchange ith row and jth row of matrix 'a'
-                    b[j], b[i] = b[i], b[j]  # interchange ith element and jth element of vector 'b'
+                    b[j], b[i] = b[i], b[j]  # interchange ith row and jth row of vector 'b'
 
 ## Gauss-Jordan algorithm
 def gauss_jordan(a,b):
+    partial_pivot(a,b)
     for i in range(n):
-        partial_pivot(a,b)
         pivot = a[i][i]
         for l in range(n):
-            b[i][l] = b[i][l]/pivot
-        for r in range(i, n):
-            a[i][r] = a[i][r]/pivot
+            if b[i][l] != 0:
+                b[i][l] = b[i][l]/pivot
+        for c in range(i, n):
+            a[i][c] = a[i][c]/pivot
 
         for k in range(n):
             if k != i and a[k][i] != 0:  # not clear from following line
                 factor = a[k][i]
-                for p in range(i, n):
-                    b[k][p] = b[k][p] - factor*b[i][p]
                 for j in range(i, n):
                     a[k][j] = a[k][j] - factor*a[i][j]
+                for p in range(n):
+                    if b[i][p] != 0:
+                        b[k][p] = b[k][p] - factor*b[i][p]
 
-gauss_jordan(a,b)
+gauss_jordan(A,b)
 print("Inverse:")
 
 # Prints inverse in a matrix form
@@ -56,7 +58,7 @@ def matrix_multi(mat1, mat2, n=3):   # The function assumes multiplication of sq
     return prod
 
 print("\nVerification of inverse:")
-c = matrix_multi(A,b)
+c = matrix_multi(A0,b)
 
 # Prints array 'c' in matrix form
 for j in range(n):
