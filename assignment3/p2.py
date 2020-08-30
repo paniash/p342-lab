@@ -3,7 +3,7 @@
 # 3x - y + 2z = -2
 # x - y + 3z = 3
 
-## Define the problem as Ax = b where x = [x1, x2, x3]
+## Define the problem as AX = b where X = [x, y, z]
 # Read matrix 'A' from file a2.txt
 with open('a2.txt', 'r') as f:
     A = [[int(num) for num in line.split(' ')] for line in f]
@@ -41,4 +41,9 @@ def gauss_jordan(a,b):
                     a[k][j] = a[k][j] - factor*a[i][j]
 
 gauss_jordan(A,b)
-print(b)
+print("Solution:")
+print("x =", b[0], ", y =", b[1], ", z =", b[2])
+
+## OUTPUT:
+# Solution:
+# x = -2.0 , y = -2.0 , z = 1.0

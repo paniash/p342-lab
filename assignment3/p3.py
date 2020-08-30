@@ -1,3 +1,13 @@
+# Find the inverse of the matrix (FYI inverse exists) and check A A-1 = I :
+#           1   -3    7
+#     A =  -1    4   -7
+#          -1    3   -6
+# You should write separate functions for --
+# (a) partial pivoting, (b) Gauss-Jordan method, (c) matrix multiplication
+# then call them from the main function.Read the matrices from files. Avoid using “break” but may
+# use “next” or “continue”
+
+# Read matrix 'A' from file a3.txt
 with open('a3.txt', 'r') as f:
     A = [[int(num) for num in line.split(' ')] for line in f]
 
@@ -63,3 +73,14 @@ c = matrix_multi(A0,b)
 # Prints array 'c' in matrix form
 for j in range(n):
     print(c[j])
+
+## OUTPUT:
+# Inverse:
+# [-3.0, 3.0, -7.0]
+# [1.0, 1.0, 0]
+# [1.0, 0, 1.0]
+
+# Verification of inverse:
+# [1.0, 0.0, 0.0]
+# [0.0, 1.0, 0.0]
+# [0.0, 0.0, 1.0]
