@@ -36,7 +36,7 @@ def gauss_jordan(a,b):
         for k in range(n):
             if k != i and a[k][i] != 0:
                 factor = a[k][i]
-                b[k] = b[k] - a[k][i]*b[i]
+                b[k] = b[k] - factor*b[i]
                 for j in range(i, n):
                     a[k][j] = a[k][j] - factor*a[i][j]
 
