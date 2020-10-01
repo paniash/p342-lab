@@ -187,50 +187,98 @@ def bracket(f, a, b):
 # Bisection method of finding roots
 def bisection(f, a, b, tol):
     a, b = bracket(f, a, b)
-    ct = 0  # keeps track of number of iterations
     iterations = []
     root_i = []
-    abs_error = [0]
-    max_iter = 200
-    while (abs(a - b) >= tol):
-        c = (a + b)/2
+    abs_error = []
+    max_iter = 200   # maximum iterations allowed
+    for i in range(max_iter):
+        c = (a+b)/2
         prod = f(a) * f(c)
         if prod < 0:
             b = c
         elif prod > 0:
             a = c
 
-        iterations.append(ct)
-        ct += 1
+        iterations.append(i)
         root_i.append(c)
-        if ct > 0:
-            error = abs(root_i[ct] - root_i[ct-1])
+        error = abs(root_i[i] - root_i[i-1])
         abs_error.append(error)
 
+        if abs(a-b)<tol:
+            return c, abs_error, iterations
 
-        if (ct >= 200):
-            print("Too many iterations!!!")
-            exit()
+# Regula Falsi method of finding roots
+def regula_falsi(f, a, b, tol):
+    a, b = bracket(f, a, b)
+    iterations = []
+    root_i = []
+    abs_error = []
+    max_iter = 200
+    c = a
+    for i in range(max_iter):
+        c_prev = c
+        c = b - ((b-a)*f(b))/(f(b) - f(a))
+        if f(a) * f(c) < 0:
+            b = c
+        elif f(a) * f(c) > 0:
+            a = c
 
-    for i in range(ct):
-        print("Absolute error: {}  Iterations: {}".format(abs_error[i], iterations[i]))
+        iterations.append(i)
+        root_i.append(c)
+        error = abs(root_i[i] - root_i[i-1])
+        abs_error.append(error)
 
-    return c
+        if abs(c - c_prev) < tol:
+            return c, abs_error, iterations
 
-# # Regular Falsi method of finding roots
-# def regular_falsi(f, a, b, tol):
-#     a, b = bracket(f, a, b)
-#     ct = 0  # keeps track of number of iterations
-#     while True:
-#         c = b - (((b-a)*f(b))/(f(b) - f(a)))
-#         prod = f(a) * f(c)
-#         if prod < 0:
-#             b = c
-#         else:
-#             a = c
 
-#         ct += 1
-#         if (f(c) < tol):
-#             break
+# Derivation function at x = x0 with default tolerance (h-value) = 1e-6
+def derivative(f, x0, tol=1e-6):
+    df = (f(x0+tol) - f(x0-tol))/(2*tol)
+    return df
 
-#     return c
+# Double derivative of a function with default tolerance (h-value) = 1e-6
+def double_derivative(f, x0, tol=1e-6):
+    f1 = derivative(f, x0) + tol
+    f0 = derivative(f, x0) - tol
+    ddf = (f1-f0)/(2*tol)
+    return ddf
+
+# Newton-Raphson method of finding roots
+def newton_raphson(f, x0, tol):
+    iterations = []
+    abs_error = []
+    max_iter = 200
+    for i in range(max_iter):
+        x_prev = x0
+        x0 = x0 - (f(x0)/derivative(f, x0))
+        iterations.append(i)
+        abs_error.append(abs(x0 - x_prev))
+
+        if abs(x0 - x_prev)<tol:
+            return x0, abs_error, iterations
+
+## Deflation function that returns the deflated function (x0 is one of the roots)
+# Uses synthetic division
+
+
+# Laguerre's method
+def laguerre(f, alpha, n, tol):
+    roots = []   # to hold all n roots
+    G = derivative(f, alpha)/f(alpha)
+    H = G**2 - (double_derivative(f, alpha)/f(alpha))
+
+    a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
+    a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
+
+    if a1 < a2:
+        a = a1
+    else:
+        a = a2
+
+    alpha_prev = alpha
+    alpha = alpha - a
+
+    if abs(alpha - alpha_prev) < tol:
+        x0 = alpha
+        roots.append(x0)
