@@ -214,7 +214,7 @@ def regula_falsi(f, a, b, tol):
     root_i = []
     abs_error = []
     max_iter = 200
-    c = a
+    c = a  # initial guess for the root
     for i in range(max_iter):
         c_prev = c
         c = b - ((b-a)*f(b))/(f(b) - f(a))
@@ -258,27 +258,124 @@ def newton_raphson(f, x0, tol):
         if abs(x0 - x_prev)<tol:
             return x0, abs_error, iterations
 
-## Deflation function that returns the deflated function (x0 is one of the roots)
+# Writes the data of bisection, regula-falsi, and newton-raphson into external csv files
+def write_table(file, iterations, abs_error):
+    table = [[ 0 for i in range(2)] for j in range(len(iterations) - 1)]
+    f = open(file, 'w')
+    for i in range(len(iterations) - 1):
+        for j in range(2):
+            table[i][:] = [iterations[i], abs_error[i]]
+
+        f.writelines(str(table[i])[1:-1] + "\n")
+    f.close()
+
+    return table
+
+# Outputs the data into a pretty table format
+def print_table(table):
+    data = table.copy()
+    col1 = ["Iterations"]       # stores first column
+    col2 = ["Absolute error"]   # stores second column
+    for i in range(len(data)):
+        col1.append(data[i][0])
+        col2.append(data[i][1])
+
+    for i in range(len(data)):
+        print(col1[i], col2[i])
+
+    return 0
+
+# Polynomial function definition
+# The coefficients is passed in the form of a list as the argument
+def polynomial(coeffs, x):
+    degree = len(coeffs) - 1
+
+    func = 0   # polynomial function
+    for i in range(len(coeffs)):
+        func += coeffs[i] * x**(degree-i)
+
+    return func
+
+## Deflation function that returns the coefficients of the deflated function (x0 is one of the roots)
 # Uses synthetic division
+def deflation(coeffs, x0):
+    new_coeffs = []
+    new_coeffs.append(coeffs[0])
+    for i in range(1, len(coeffs)):
+        new_coeffs.append(x0*new_coeffs[i-1] + coeffs[i])
 
+    new_coeffs.pop()    # removes the last '0' from the new set of coefficients
 
-# Laguerre's method
-def laguerre(f, alpha, n, tol):
-    roots = []   # to hold all n roots
-    G = derivative(f, alpha)/f(alpha)
-    H = G**2 - (double_derivative(f, alpha)/f(alpha))
+    return new_coeffs
 
-    a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
-    a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
+def poly_derivative(coeffs, alpha, tol=1e-6):
+    dv = (polynomial(coeffs, alpha+tol) - polynomial(coeffs, alpha-tol))/(2*tol)
+    return dv
 
-    if a1 < a2:
-        a = a1
+def poly_double_derivative(coeffs, alpha, tol=1e-6):
+    ddv = (poly_derivative(coeffs, alpha+tol) - poly_derivative(coeffs, alpha-tol))/(2*tol)
+    return ddv
+
+# Computes variables in Laguerre's method
+def laguerre(coeffs, alpha, tol):
+    n = len(coeffs)
+    if polynomial(coeffs, alpha) < tol:
+        return alpha
+
     else:
-        a = a2
+        G = poly_derivative(coeffs, alpha)/(polynomial(coeffs, alpha))
+        H = G**2 - (poly_double_derivative(coeffs, alpha)/polynomial(coeffs, alpha))
 
-    alpha_prev = alpha
-    alpha = alpha - a
+        a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
+        a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
 
-    if abs(alpha - alpha_prev) < tol:
-        x0 = alpha
-        roots.append(x0)
+        if a1 < a2:
+            a = a1
+        else:
+            a = a2
+
+        alpha_prev = alpha
+        alpha = alpha - a
+
+        if abs(alpha - alpha_prev) < tol:
+            x0 = alpha
+            return x0
+
+# Polynomial root solver using Laguerre's method
+def polynomial_solver(coeffs, alpha, tol):
+    roots = []
+    index = -1  # holds index position of newly added root
+    while(len(coeffs) > 1):
+        roots.append(laguerre(coeffs, alpha, tol))
+        index += 1
+        coeffs = deflation(coeffs, roots[index])
+
+    return roots
+
+
+# def laguerre(coeffs, alpha, n, tol):
+#     f = polynomial(x, coeffs)
+#     roots = []   # to hold all n roots
+#     if f(alpha) < tol:
+#         roots.append(alpha)
+#         deflation(coeffs, alpha)
+
+#     elif:
+#         G = derivative(f, alpha)/f(alpha)
+#         H = G**2 - (double_derivative(f, alpha)/f(alpha))
+
+#         a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
+#         a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
+
+#         if a1 < a2:
+#             a = a1
+#         else:
+#             a = a2
+
+#         alpha_prev = alpha
+#         alpha = alpha - a
+
+#         if abs(alpha - alpha_prev) < tol:
+#             x0 = alpha
+#             roots.append(x0)
+#             deflation(coeffs, x0)
