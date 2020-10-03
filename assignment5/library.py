@@ -101,7 +101,7 @@ def log_term(x, i):
     return term
 
 # Logarithmic function expanded using Taylor expansion
-def log(x, tol):
+def log(x, tol=1e-6):
     summation = 0
     i = 1
     diff = log_term(x, i)
@@ -128,7 +128,7 @@ def sine_term(x, i):
     return term
 
 # Sine function using Taylor expansion
-def sin(x, tol):
+def sin(x, tol=1e-6):
     summation = 0
     i = 0
     diff = sine_term(x, i)
@@ -144,7 +144,7 @@ def cos_term(x, i):
     return term
 
 # Cosine function using Taylor expansion
-def cos(x, tol):
+def cos(x, tol=1e-6):
     summation = 0
     i = 0
     diff = cos_term(x, i)
@@ -318,31 +318,42 @@ def poly_double_derivative(coeffs, alpha, tol=1e-6):
 
 # Computes variables in Laguerre's method
 def laguerre(coeffs, alpha, tol):
-    n = len(coeffs)
-    if polynomial(coeffs, alpha) < tol:
+    n = len(coeffs) - 1    # n is the degree of the polynomial
+    max_iter = 200
+
+    if abs(polynomial(coeffs, alpha)) < tol:
         return alpha
 
     else:
-        G = poly_derivative(coeffs, alpha)/(polynomial(coeffs, alpha))
-        H = G**2 - (poly_double_derivative(coeffs, alpha)/polynomial(coeffs, alpha))
+        for i in range(max_iter):
+            G = poly_derivative(coeffs, alpha)/(polynomial(coeffs, alpha))
+            H = G**2 - (poly_double_derivative(coeffs, alpha)/polynomial(coeffs, alpha))
 
-        a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
-        a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
+            denom1 = (G + ((n-1)*(n*H - G**2))**0.5)
+            denom2 = (G - ((n-1)*(n*H - G**2))**0.5)
+            if denom1 > denom2:
+                a = n/denom1
 
-        if a1 < a2:
-            a = a1
-        else:
-            a = a2
+            else:
+                a = n/denom2
 
-        alpha_prev = alpha
-        alpha = alpha - a
+            # a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
+            # a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
 
-        if abs(alpha - alpha_prev) < tol:
-            x0 = alpha
-            return x0
+            # if a1 < a2:
+            #     a = a1
+            # else:
+            #     a = a2
+
+            alpha_prev = alpha
+            alpha = alpha - a
+
+            if abs(alpha - alpha_prev) < tol:
+                x0 = alpha
+                return x0
 
 # Polynomial root solver using Laguerre's method
-def polynomial_solver(coeffs, alpha, tol):
+def polynomial_solver(coeffs, alpha, tol=1e-6):
     roots = []
     index = -1  # holds index position of newly added root
     while(len(coeffs) > 1):
@@ -351,31 +362,3 @@ def polynomial_solver(coeffs, alpha, tol):
         coeffs = deflation(coeffs, roots[index])
 
     return roots
-
-
-# def laguerre(coeffs, alpha, n, tol):
-#     f = polynomial(x, coeffs)
-#     roots = []   # to hold all n roots
-#     if f(alpha) < tol:
-#         roots.append(alpha)
-#         deflation(coeffs, alpha)
-
-#     elif:
-#         G = derivative(f, alpha)/f(alpha)
-#         H = G**2 - (double_derivative(f, alpha)/f(alpha))
-
-#         a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
-#         a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
-
-#         if a1 < a2:
-#             a = a1
-#         else:
-#             a = a2
-
-#         alpha_prev = alpha
-#         alpha = alpha - a
-
-#         if abs(alpha - alpha_prev) < tol:
-#             x0 = alpha
-#             roots.append(x0)
-#             deflation(coeffs, x0)

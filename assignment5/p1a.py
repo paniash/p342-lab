@@ -1,6 +1,6 @@
-# Question 1
-from library import bisection, newton_raphson, regula_falsi, write_table, print_table
-from math import sin, log
+# Question 1a
+from library import bisection, newton_raphson, regula_falsi, write_table, print_table, sin
+from math import log
 import matplotlib.pyplot as plt
 
 # Function definition
@@ -33,9 +33,8 @@ print_table(table1)
 print("\nNewton-Raphson: ")
 print_table(table2)
 
-
-# plt.plot(iterations0, abs_error0, label="bisection")
-# plt.plot(iterations1, abs_error1, label="regular-falsi")
-# plt.plot(iterations2, abs_error2, label="newton-raphson")
-# plt.legend()
-# plt.show()
+plt.plot(iterations0, abs_error0, label="bisection")
+plt.plot(iterations1, abs_error1, label="regular-falsi")
+plt.plot(iterations2, abs_error2, label="newton-raphson")
+plt.legend()
+plt.show()

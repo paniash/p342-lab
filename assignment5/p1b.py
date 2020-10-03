@@ -1,5 +1,5 @@
-from library import bisection, regula_falsi, newton_raphson, output_table
-from math import cos
+# Question 1b
+from library import bisection, regula_falsi, newton_raphson, write_table, cos
 import matplotlib.pyplot as plt
 
 def f(x):
@@ -18,9 +18,9 @@ print("Regula-falsi:", root1)
 root2, abs_error2, iterations2 = newton_raphson(f, -2, 1e-6)
 print("Newton-Raphson:", root2)
 
-table0 = output_table('bisection_a.csv', iterations0, abs_error0)
-table1 = output_table('regula_falsi_a.csv', iterations1, abs_error1)
-table2 = output_table('newton_raphson_a.csv', iterations2, abs_error2)
+table0 = write_table('bisection_a.csv', iterations0, abs_error0)
+table1 = write_table('regula_falsi_a.csv', iterations1, abs_error1)
+table2 = write_table('newton_raphson_a.csv', iterations2, abs_error2)
 
 plt.plot(iterations0, abs_error0, label='Bisection')
 plt.plot(iterations1, abs_error1, label='Regula Falsi')
