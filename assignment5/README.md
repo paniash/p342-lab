@@ -7,4 +7,4 @@ In this section, we attempt to solve various equations using the following metho
 - Newton Raphson
 
 ## Question 2
-Using Laguerre's method and synthetic division, the roots of an $n$ degree polynomial is found.
+Using Laguerre's method and synthetic division, the roots of an n degree polynomial is found.
