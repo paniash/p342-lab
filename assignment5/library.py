@@ -96,21 +96,11 @@ def determinant(a):
 # ASSIGNMENT-5 Functions
 ############################
 
-def log_term(x, i):
-    term = ((-1)**(i+1))*(((x-1)**i)/i)
-    return term
-
-# Logarithmic function expanded using Taylor expansion
+## Logarithmic function expanded using Taylor expansion
+# ln (x) = limit n -> \infty {n * (x**(1/n) - 1)}
 def log(x, tol=1e-6):
-    summation = 0
-    i = 1
-    diff = log_term(x, i)
-    while abs(diff) > tol:
-        summation += diff
-        i += 1
-        diff = log_term(x, i)
-
-    return summation
+    n = 10000
+    return n * (x**(1/n) - 1)
 
 # Returns factorial of a non-negative integer
 def factorial(x):
