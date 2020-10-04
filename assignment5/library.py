@@ -327,14 +327,6 @@ def laguerre(coeffs, alpha, tol):
             else:
                 a = n/denom2
 
-            # a1 = n/(G + ((n-1)*(n*H - G**2))**0.5)
-            # a2 = n/(G - ((n-1)*(n*H - G**2))**0.5)
-
-            # if a1 < a2:
-            #     a = a1
-            # else:
-            #     a = a2
-
             alpha_prev = alpha
             alpha = alpha - a
 
