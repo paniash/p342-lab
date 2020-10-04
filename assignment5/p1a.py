@@ -12,10 +12,12 @@ def f(x):
 print("Roots in the following methods:\n")
 root0, abs_error0, iterations0  = bisection(f, 1.5, 2.5, 1e-6)
 print("Bisection: ", root0)
+# Removes the first element of abs_error0 and iterations0 since it is simply '0'
 abs_error0.remove(0)
 iterations0.remove(0)
 
 root1, abs_error1, iterations1 = regula_falsi(f, 1.5, 2.5, 1e-6)
+# Removes the first element of abs_error1 and iterations1 since it is simply '0'
 abs_error1.remove(0)
 iterations1.remove(0)
 print("Regula-falsi:", root1)
