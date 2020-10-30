@@ -250,12 +250,12 @@ def newton_raphson(f, x0, tol):
             return x0, abs_error, iterations
 
 # Writes the data of bisection, regula-falsi, and newton-raphson into external csv files
-def write_table(file, iterations, abs_error):
-    table = [[ 0 for i in range(2)] for j in range(len(iterations) - 1)]
+def write_table(file, col1, col2, col3):
+    table = [[ 0 for i in range(3)] for j in range(len(col1))]
     f = open(file, 'w')
-    for i in range(len(iterations) - 1):
-        for j in range(2):
-            table[i][:] = [iterations[i], abs_error[i]]
+    for i in range(len(col1)):
+        for j in range(3):
+            table[i][:] = [col1[i], col2[i], col3[i]]
 
         f.writelines(str(table[i])[1:-1] + "\n")
     f.close()
@@ -263,16 +263,18 @@ def write_table(file, iterations, abs_error):
     return table
 
 # Outputs the data into a pretty table format
-def print_table(table):
+def print_table(table, head1, head2, head3):
     data = table.copy()
-    col1 = ["Iterations"]       # stores first column
-    col2 = ["Absolute error"]   # stores second column
+    col1 = [head1]       # stores first column
+    col2 = [head2]   # stores second column
+    col3 = [head3]      # stores third column
     for i in range(len(data)):
         col1.append(data[i][0])
         col2.append(data[i][1])
+        col3.append(data[i][2])
 
-    for i in range(len(data)):
-        print(col1[i], col2[i])
+    for i in range(len(data)+1):
+        print(col1[i], col2[i], col3[i])
 
     return 0
 
@@ -357,7 +359,6 @@ def integrate_midpoint(func, lims, N):
         print("Please enter 2 limits only!")
         exit()
 
-    N = 100
     tol = (lims[1] - lims[0])/N
     total = 0
     for i in range(1,N+1):

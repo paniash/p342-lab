@@ -11,7 +11,7 @@ def f(x):
     return 4/(1+x**2)
 
 # List containing values of N for sampling
-nlist = [ i for i in range(10, 3000, 10) ]
+nlist = [ i for i in range(10, 10000, 10) ]
 
 # List containing all values of F_n for corresponding vallues of N
 flist = []
@@ -32,13 +32,8 @@ for n in nlist:
     sigma_list.append(sigma)
 
 
-# plt.title("Plot of $\pi$ vs $N$")
-# plt.plot(nlist, flist)
-# plt.xlabel("N")
-# plt.ylabel("Estimate of $\pi$")
-
-plt.title("Standard deviation plot")
+plt.title("Plot of $\pi$ vs $N$")
+plt.plot(nlist, flist)
 plt.xlabel("N")
-plt.ylabel("$\sigma$")
-plt.plot(nlist, sigma_list)
+plt.ylabel("Estimate of $\pi$")
 plt.show()
