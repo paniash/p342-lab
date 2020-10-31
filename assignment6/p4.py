@@ -1,17 +1,21 @@
 import random
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from library import monte_carlo
+
+mpl.use("PDF")  # renders the plots in pdf format
 
 # Define limits
 a = 0.0
 b = 1.0
+N_max = 10000
 
 # Define function
 def f(x):
     return 4/(1+x**2)
 
 # List containing values of N for sampling
-nlist = [ i for i in range(10, 10000, 10) ]
+nlist = [ i for i in range(10, N_max, 10) ]
 
 # List containing all values of F_n for corresponding vallues of N
 flist = []
@@ -37,3 +41,5 @@ plt.plot(nlist, flist)
 plt.xlabel("N")
 plt.ylabel("Estimate of $\pi$")
 plt.show()
+
+plt.savefig("plot_4.pdf")

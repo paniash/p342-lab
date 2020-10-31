@@ -17,7 +17,8 @@ for i in N:
     sol1_list.append(sol1)
     abs1_error.append(abs(analytic_sol - sol1))
 table1 = write_table('table_midpoint.csv', N, sol1_list, abs1_error)
-print_table(table1, "\nN", "Integral", "Absolute error")
+print("\nMidpoint method:")
+print_table(table1, "N", "Integral", "Absolute error")
 
 # Trapezoid method
 sol2_list = []
@@ -27,7 +28,8 @@ for i in N:
     sol2_list.append(sol2)
     abs2_error.append(abs(analytic_sol - sol2))
 table2 = write_table('table_trapezoid.csv', N, sol2_list, abs2_error)
-print_table(table2, "\nN", "Integral", "Absolute error")
+print("\nTrapezoid method:")
+print_table(table2, "N", "Integral", "Absolute error")
 
 # Simpson method
 sol3_list = []
@@ -37,4 +39,5 @@ for i in N:
     sol3_list.append(sol3)
     abs3_error.append(abs(analytic_sol - sol3))
 table3 = write_table('table_simpson.csv', N, sol3_list, abs3_error)
-print_table(table3, "\nN", "Integral", "Absolute error")
+print("\nSimpson method:")
+print_table(table3, "N", "Integral", "Absolute error")
