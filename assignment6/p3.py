@@ -42,5 +42,16 @@ sol1 = integrate_midpoint(f, [0,1], n_mid)
 sol2 = integrate_trapezoid(f, [0,1], n_trap)
 sol3 = integrate_simpson(f, [0,1], n_simp)
 
-print("The integral is:\n")
+print("Integral through various methods:\n")
 print("Midpoint: ", sol1, "\nTrapezoid: ", sol2, "\nSimpson: ", sol3)
+
+
+##################################################
+################ OUTPUT #########################
+##################################################
+
+# Integral through various methods:
+
+# Midpoint:  0.7471296111426919
+# Trapezoid:  0.7464599944330834
+# Simpson:  0.827708873985558
