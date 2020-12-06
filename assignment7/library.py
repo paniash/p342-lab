@@ -427,11 +427,14 @@ def monte_carlo(func, lims, N):
 ##############################################################
 
 # Solves differential equation using forward Euler
-def forward_euler(dydx, y0, x0, n, step_size=0.05):
+def forward_euler(dydx, y0, x0, xf, step_size):
+    """ Yields solution from x=x0 to x=xf """
     x = []
     y = []
     x.append(x0)
     y.append(y0)
+
+    n = int((xf-x0)/step_size)      # no. of steps
     for i in range(n):
         x.append(x[i] + step_size)
 
@@ -441,13 +444,17 @@ def forward_euler(dydx, y0, x0, n, step_size=0.05):
     return x, y
 
 # Solves differential equation using Runge-Kutta method
-def runge_kutta(d2ydx2, dydx, x0, y0, z0, n, step_size=0.05):
+def runge_kutta(d2ydx2, dydx, x0, y0, z0, xf, step_size):
+    """ Yields solution from x=x0 to x=xf
+    y(x0) = y0 & y'(x0) = z0 """
     x = []
     y = []
     z = []
     x.append(x0)
     y.append(y0)
     z.append(z0)
+
+    n = int((xf-x0)/step_size)      # no. of steps
     for i in range(n):
         x.append(x[i] + step_size)
         k1 = step_size * dydx(x[i], y[i], z[i])
@@ -471,15 +478,12 @@ def lagrange_interpolation(zeta_h, zeta_l, yh, yl, y):
 
 
 # Solves 2nd order ODE given Dirichlet boundary conditions
-def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess, tol=1e-6):
+def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess, step_size, tol=1e-6):
     """ (x0, y0) is the first boundary condition
     (xf, yf) is the second boundary condition """
 
-    # No. of steps (n)
-    steps = int((xf-x0)/0.05)
-
     # Solve for x & y with our guess
-    x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, steps)
+    x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)
     yn = y[-1]      # last element of the list (y_n)
 
     if abs(yn - yf) > tol:      # otherwise bang-on solution
@@ -489,13 +493,13 @@ def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess, tol=1e-6):
 
             # loop to calculate the second guess using brute force
             while yn >= yf:
-                i = 0
+                i = 1
                 if i%2 == 0:
                     z_guess = zeta_h + (i/2 + 1)
                 else:
                     z_guess = zeta_h - ((i-1)/2 + 1)
 
-                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, steps)[1]
+                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)[1]
                 yn = y[-1]      # last element of the list (y_n)
                 i += 1
 
@@ -514,7 +518,7 @@ def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess, tol=1e-6):
                 else:
                     z_guess = zeta_l - ((i-1)/2 + 1)
 
-                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, steps)[1]
+                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)[1]
                 yn = y[-1]      # last element of the list (y_n)
                 i += 1
 
@@ -526,11 +530,12 @@ def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess, tol=1e-6):
         zeta = lagrange_interpolation(zeta_h, zeta_l, yh, yl, yf)
 
         # Use Runge-Kutta with zeta as guess
-        x, y = runge_kutta(d2ydx2, dydx, x0, y0, zeta, steps)
-        print("Guesses for z:\nzeta_h = ", zeta_h, "\nzeta_l = ", zeta_l)
+        x, y = runge_kutta(d2ydx2, dydx, x0, y0, zeta, xf, step_size)
+        print("Guesses for z:\nzeta_h = ", zeta_h, "(value overshoots)",
+                "\nzeta_l = ", zeta_l, "(value undershoots)")
 
         return x, y
 
     else:   # bang-on solution
-        x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, 20)
+        x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)
         return x, y
