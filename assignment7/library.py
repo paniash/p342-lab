@@ -478,64 +478,56 @@ def lagrange_interpolation(zeta_h, zeta_l, yh, yl, y):
 
 
 # Solves 2nd order ODE given Dirichlet boundary conditions
-def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess, step_size, tol=1e-6):
-    """ (x0, y0) is the first boundary condition
-    (xf, yf) is the second boundary condition """
+def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess1, z_guess2, step_size, tol=1e-6):
+    x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess1, xf, step_size)
+    yn = y[-1]
 
-    # Solve for x & y with our guess
-    x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)
-    yn = y[-1]      # last element of the list (y_n)
-
-    if abs(yn - yf) > tol:      # otherwise bang-on solution
-        if yn > yf :
-            zeta_h = z_guess
-            yh = yn
-
-            # loop to calculate the second guess using brute force
-            while yn >= yf:
-                i = 1
-                if i%2 == 0:
-                    z_guess = zeta_h + (i/2 + 1)
-                else:
-                    z_guess = zeta_h - ((i-1)/2 + 1)
-
-                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)[1]
-                yn = y[-1]      # last element of the list (y_n)
-                i += 1
-
-            # after the loop, yn < yf
-            zeta_l = z_guess
+    if abs(yn - yf) > tol:
+        if yn < yf:
+            zeta_l = z_guess1
             yl = yn
 
-        elif yn < yf:
-            zeta_l = z_guess
-            yl = yn
+            x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess2, xf, step_size)
+            yn = y[-1]
 
-            while yn <= yf:
-                i = 0
-                if i%2 == 0:
-                    z_guess = zeta_l + (i/2 + 1)
-                else:
-                    z_guess = zeta_l - ((i-1)/2 + 1)
+            if yn > yf:
+                zeta_h = z_guess2
+                yh = yn
 
-                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)[1]
-                yn = y[-1]      # last element of the list (y_n)
-                i += 1
+                # print the valid guess values and step_size
+                print("For dx = {} => zeta_l: {} & zeta_h: {}".format(step_size, zeta_l, zeta_h))
 
-            # after the loop, yn > yf
-            zeta_h = z_guess
+                # calculate zeta using Lagrange interpolation
+                zeta = lagrange_interpolation(zeta_h, zeta_l, yh, yl, yf)
+
+                # using this zeta to solve using RK4
+                x, y = runge_kutta(d2ydx2, dydx, x0, y0, zeta, xf, step_size)
+                return x, y
+
+            else:
+                print("Bracketing FAIL! Try another set of guesses.")
+
+
+        elif yn > yf:
+            zeta_h = z_guess1
             yh = yn
 
-        # Calculate zeta
-        zeta = lagrange_interpolation(zeta_h, zeta_l, yh, yl, yf)
+            x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess2, xf, step_size)
+            yn = y[-1]
 
-        # Use Runge-Kutta with zeta as guess
-        x, y = runge_kutta(d2ydx2, dydx, x0, y0, zeta, xf, step_size)
-        print("Guesses for z:\nzeta_h = ", zeta_h, "(value overshoots)",
-                "\nzeta_l = ", zeta_l, "(value undershoots)")
+            if yn < yf:
+                zeta_l = z_guess2
+                yl = yn
 
-        return x, y
+                # calculate zeta using Lagrange interpolation
+                zeta = lagrange_interpolation(zeta_h, zeta_l, yh, yl, yf)
 
-    else:   # bang-on solution
-        x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, xf, step_size)
-        return x, y
+                x, y = runge_kutta(d2ydx2, dydx, x0, y0, zeta, xf, step_size)
+                return x, y
+
+            else:
+                print("Bracketing FAIL! Try another set of guesses.")
+
+
+    else:
+        return x, y         # bang-on solution with z_guess1
