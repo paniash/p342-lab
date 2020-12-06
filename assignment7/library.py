@@ -426,6 +426,7 @@ def monte_carlo(func, lims, N):
 #### Functions to be imported for differential equations #####
 ##############################################################
 
+# Solves differential equation using forward Euler
 def forward_euler(dydx, y0, x0, n, step_size=0.05):
     x = []
     y = []
@@ -439,6 +440,7 @@ def forward_euler(dydx, y0, x0, n, step_size=0.05):
 
     return x, y
 
+# Solves differential equation using Runge-Kutta method
 def runge_kutta(d2ydx2, dydx, x0, y0, z0, n, step_size=0.05):
     x = []
     y = []
@@ -461,3 +463,74 @@ def runge_kutta(d2ydx2, dydx, x0, y0, z0, n, step_size=0.05):
         z.append(z[i] + (l1 + 2*l2 + 2*l3 + l4)/6)
 
     return x, y
+
+
+def lagrange_interpolation(zeta_h, zeta_l, yh, yl, y):
+    zeta = zeta_l + (zeta_h - zeta_l) * (y - yl)/(yh - yl)
+    return zeta
+
+
+# Solves 2nd order ODE given Dirichlet boundary conditions
+def shooting_method(d2ydx2, dydx, x0, y0, xf, yf, z_guess, tol=1e-6):
+    """ (x0, y0) is the first boundary condition
+    (xf, yf) is the second boundary condition """
+
+    # No. of steps (n)
+    steps = int((xf-x0)/0.05)
+
+    # Solve for x & y with our guess
+    x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, steps)
+    yn = y[-1]      # last element of the list (y_n)
+
+    if abs(yn - yf) > tol:      # otherwise bang-on solution
+        if yn > yf :
+            zeta_h = z_guess
+            yh = yn
+
+            # loop to calculate the second guess using brute force
+            while yn >= yf:
+                i = 0
+                if i%2 == 0:
+                    z_guess = zeta_h + (i/2 + 1)
+                else:
+                    z_guess = zeta_h - ((i-1)/2 + 1)
+
+                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, steps)[1]
+                yn = y[-1]      # last element of the list (y_n)
+                i += 1
+
+            # after the loop, yn < yf
+            zeta_l = z_guess
+            yl = yn
+
+        elif yn < yf:
+            zeta_l = z_guess
+            yl = yn
+
+            while yn <= yf:
+                i = 0
+                if i%2 == 0:
+                    z_guess = zeta_l + (i/2 + 1)
+                else:
+                    z_guess = zeta_l - ((i-1)/2 + 1)
+
+                y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, steps)[1]
+                yn = y[-1]      # last element of the list (y_n)
+                i += 1
+
+            # after the loop, yn > yf
+            zeta_h = z_guess
+            yh = yn
+
+        # Calculate zeta
+        zeta = lagrange_interpolation(zeta_h, zeta_l, yh, yl, yf)
+
+        # Use Runge-Kutta with zeta as guess
+        x, y = runge_kutta(d2ydx2, dydx, x0, y0, zeta, steps)
+        print("Guesses for z:\nzeta_h = ", zeta_h, "\nzeta_l = ", zeta_l)
+
+        return x, y
+
+    else:   # bang-on solution
+        x, y = runge_kutta(d2ydx2, dydx, x0, y0, z_guess, 20)
+        return x, y
