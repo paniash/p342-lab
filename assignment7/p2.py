@@ -1,7 +1,6 @@
 from library import runge_kutta
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import numpy as np
 
 # Save plot as pdf
 mpl.use("PDF")
