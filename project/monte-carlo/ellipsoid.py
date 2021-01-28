@@ -41,14 +41,12 @@ def monte_carlo(N, a, b, c):
 
 # Return list of estimated volumes as a function of N
 def list_volumes(steps, a, b, c):
-    n_list = []
     vol_list = []
     for n in steps:
         vol, n = monte_carlo(n, a, b, c)
-        n_list.append(n)
         vol_list.append(vol)
 
-    return vol_list, n_list
+    return vol_list, steps
 
 # Function to return points to cover volume
 def ellipsoid_volume(N, a, b, c):
@@ -69,3 +67,12 @@ def ellipsoid_volume(N, a, b, c):
             z_vol.append(zrand[i])
 
     return x_vol, y_vol, z_vol
+
+# Function to return fractional error as a function of N
+def frac_error(steps, a, b, c):
+    error = []   # holds fractional errors for each N
+    for n in steps:
+        vol, n = monte_carlo(n, a, b, c)
+        error.append((vol-12.566)/12.566)
+
+    return error, steps
