@@ -11,6 +11,6 @@ x, y, z = ellipsoid_volume(10000, a, b, c)
 # Plotting volume of ellipsoid
 fig = plt.figure()
 ax = plt.axes(projection='3d')
-ax.plot3D(x, y, z)
+ax.scatter3D(x, y, z, s=0.8)
 ax.set_title('3D plot of ellisoid ($N$=10000)')
 plt.show()
