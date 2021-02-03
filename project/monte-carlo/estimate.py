@@ -16,11 +16,12 @@ steps = [ i for i in range(500, N_max, 100) ]
 y, x = list_volumes(steps, a, b, c)
 plt.plot(x, y, label='Estimated volume')
 
+# Plotting
 exact_x = np.linspace(0, 50000, 100)
 exact_y = np.ones(100) * 12.566
 plt.plot(exact_x, exact_y, label='Exact volume = 12.566 units$^3$')
 plt.xlabel('Number of steps $N$')
-plt.ylabel('Estimated volume of ellisoid $V$')
+plt.ylabel('Estimated volume of ellisoid $V$ (units$^3$)')
 plt.title('Estimation of the volume of ellipsoid using Monte-Carlo')
 plt.legend()
 plt.show()
