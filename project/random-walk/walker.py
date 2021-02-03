@@ -6,9 +6,10 @@ import random
 
 random.seed(1029)
 
+# Function to generate a list of coordinates in a 2D plane for a random walk
+# with N given as an input
 def random_walk(N):
-    '''Generates a list of x and y coordinates for a random walk with a
-    user-specified number of steps N
+    '''N: Number of steps of the random walk
     '''
     pos_x = 0    # instantaneous x coordinate
     pos_y = 0    # instantaneous y coordinate

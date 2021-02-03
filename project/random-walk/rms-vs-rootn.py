@@ -1,11 +1,11 @@
+## Plots RMS radial vs \sqrt{N}
 # Imports
 from walker import *
 
-# Plots RMS radial vs \sqrt{N}
 N = (250, 500, 750, 1000, 1500)
 
-rms_vals = []
-root_n_vals = []
+rms_vals = []   # holds RMS distances for each N
+root_n_vals = []    # holds radial distances for each N
 for i in N:
     rms_vals.append(eval_averages(i)[0])
     root_n_vals.append(sqrt(i))
