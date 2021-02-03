@@ -1,8 +1,10 @@
+## To plot the estimated volume as a function of total random points N
 # Imports
 from ellipsoid import *
 import numpy as np
+import matplotlib.pyplot as plt
 
-# Define semi-axes
+# Define semi-axes and max points
 a = 1.0
 b = 1.5
 c = 2.0

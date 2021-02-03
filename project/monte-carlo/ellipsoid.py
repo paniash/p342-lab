@@ -23,6 +23,8 @@ def ellipsoid(x, y, z, a, b, c):
 
 # Define monte-carlo function for estimating volume
 def monte_carlo(N, a, b, c):
+    '''Returns the estimated volume and corresponding total points N
+    '''
     xrand = []
     yrand = []
     zrand = []
@@ -39,7 +41,7 @@ def monte_carlo(N, a, b, c):
 
     return estimated_volume, N
 
-# Return list of estimated volumes as a function of N
+# Returns list of estimated volumes as a function of N
 def list_volumes(steps, a, b, c):
     vol_list = []
     for n in steps:
@@ -50,9 +52,12 @@ def list_volumes(steps, a, b, c):
 
 # Function to return points to cover volume
 def ellipsoid_volume(N, a, b, c):
+    # Random points within the cuboidal enclosure
     xrand = []
     yrand = []
     zrand = []
+
+    # Hit points (land within the ellipsoid volume)
     x_vol = []
     y_vol = []
     z_vol = []

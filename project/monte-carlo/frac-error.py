@@ -1,4 +1,6 @@
+## Plots fractional error vs total no. of random points N
 from ellipsoid import frac_error
+import matplotlib.pyplot as plt
 
 # Define semi-axes
 a = 1.0
@@ -14,3 +16,4 @@ plt.plot(step_number, error)
 plt.title('Fractional error vs $N$')
 plt.xlabel('Step number $N$')
 plt.ylabel('Fractional error')
+plt.show()

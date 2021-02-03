@@ -1,3 +1,4 @@
+## 3D plot for the obtained ellipsoid using Monte Carlo
 # Imports
 from ellipsoid import *
 
@@ -8,7 +9,7 @@ c = 2.0
 
 x, y, z = ellipsoid_volume(10000, a, b, c)
 
-# Plotting volume of ellipsoid
+# Plotting ellipsoid on 3D space
 fig = plt.figure()
 ax = plt.axes(projection='3d')
 ax.scatter3D(x, y, z, s=0.8)
