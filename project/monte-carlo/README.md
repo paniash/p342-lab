@@ -6,11 +6,11 @@
 
 ### Estimate of volume
 
-![Estimate](./estimate.png)
+![Estimate](.plots/estimate.png)
 
 ### Fractional error as a function of N
-![Fractional](./frac.png)
+![Fractional](.plots/frac.png)
 
 ### 3D Plot of ellipsoid
 
-![Volume](./volume3d.png)
+![Volume](.plots/volume3d.png)
