@@ -23,13 +23,13 @@ omega_0 = exp(intercept)
 omega_c = -slope
 print("omega_0 = {} and omega_c = {}".format(omega_0, omega_c))
 
-# Reverting back to original set of yvals
-for i in range(len(yvals)):
-    yvals[i] = exp(yvals[i])
-
 # Quality of fit for above set of data points (Pearson's r)
 quality = pearson_r(xvals, yvals)
 print("Pearson's r =", quality)
+
+# Reverting back to original set of yvals
+for i in range(len(yvals)):
+    yvals[i] = exp(yvals[i])
 
 # Plot the datapoints and fitted function
 t = np.linspace(-0.25, 3.5, 100)
@@ -47,4 +47,4 @@ plt.show()
 ############################ OUTPUT #######################################
 ###########################################################################
 # omega_0 = 2.2040080182882553 and omega_c = 0.39559617454855667
-# Pearson's r = 0.9851557666128383
+# Pearson's r = 0.9991179387307721
