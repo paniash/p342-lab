@@ -2,7 +2,7 @@
 
 # Imports
 from math import exp
-from library import *
+from library import newton_raphson
 
 # Define Planck's law spectrum function
 def planck(x):

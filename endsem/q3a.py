@@ -18,7 +18,7 @@ print("omega_0 = {} and omega_c = {}".format(omega_0, omega_c))
 
 # Quality of fit for above set of data points (Pearson's r)
 pearson_r = pearson_r(xvals, yvals)
-print("The quality of fit, Pearson's r = ", pearson_r)
+print("Pearson's r =", pearson_r)
 
 # Plot the datapoints and fitted function
 t = np.linspace(-0.25, 3.5, 100)
@@ -35,4 +35,4 @@ plt.show()
 ############################ OUTPUT #######################################
 ###########################################################################
 # omega_0 = 2.029102564102564 and omega_c = -0.47470862470862485
-# The quality of fit, Pearson's r =  0.9851557666128383
+# Pearson's r = 0.9851557666128383
